@@ -1,29 +1,36 @@
 package com.felipe.texoittest.domain.producer.service;
 
-import com.felipe.texoittest.domain.producer.entity.ProducerEntity;
-
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
+import com.felipe.texoittest.domain.producer.entity.ProducerEntity;
 
 public class ProducerService {
 
-    public static List<ProducerEntity> getTopMinIntervalWinner(List<ProducerEntity> producer) {
-        int MIN_WINNERS = 1;
-        return producer
+    public static List<ProducerEntity> getAllTopMinIntervalWinner(List<ProducerEntity> producer) {
+        Map<Integer, List<ProducerEntity>> producerEntityGroupedMin = producer
                 .stream()
-                .sorted(Comparator.comparing(ProducerEntity::getMinInterval))
-                .limit(MIN_WINNERS)
+                .collect(Collectors.groupingBy(ProducerEntity::getMinInterval, TreeMap::new, Collectors.toList()));
+
+        Integer minInterval = producerEntityGroupedMin.keySet().stream().findFirst().orElse(0);
+
+        return producerEntityGroupedMin.get(minInterval)
+                .stream()
                 .toList();
     }
 
-    public static List<ProducerEntity> getTopMaxIntervalWinner(List<ProducerEntity> producer, List<ProducerEntity> producerMin) {
-        int MAX_WINNERS = 1;
-        return producer
+    public static List<ProducerEntity> getAllTopMaxIntervalWinner(List<ProducerEntity> producer, List<ProducerEntity> producerMin) {
+        Map<Integer, List<ProducerEntity>> producerEntityGroupedMax = producer
                 .stream()
-                .filter(p -> !producerMin.contains(p))
-                .sorted(Comparator.comparing(ProducerEntity::getMaxInterval).reversed())
-                .limit(MAX_WINNERS)
-                .sorted(Comparator.comparing(ProducerEntity::getMaxInterval))
+                .collect(Collectors.groupingBy(ProducerEntity::getMaxInterval, TreeMap::new, Collectors.toList()));
+
+        Integer maxInterval = producerEntityGroupedMax.keySet().stream().max(Comparator.naturalOrder()).orElse(0);
+
+        return producerEntityGroupedMax.get(maxInterval)
+                .stream()
                 .toList();
     }
 }
