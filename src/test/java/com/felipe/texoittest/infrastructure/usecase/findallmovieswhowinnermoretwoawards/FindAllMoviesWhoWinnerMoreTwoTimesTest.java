@@ -25,7 +25,7 @@ public class FindAllMoviesWhoWinnerMoreTwoTimesTest {
         OutputFindAllMoviesMinAndMaxInterval result = findAllMoviesWhoWinnerMoreTwoTimes.execute();
 
         assertEquals(2, result.getMin().size());
-        assertEquals(1, result.getMax().size());
+        assertEquals(2, result.getMax().size());
 
         assertEquals("Joel Silver", result.getMin().get(0).getProducer());
         assertEquals(1, result.getMin().get(0).getInterval());
@@ -39,8 +39,13 @@ public class FindAllMoviesWhoWinnerMoreTwoTimesTest {
 
         assertEquals("Matthew Vaughn", result.getMax().get(0).getProducer());
         assertEquals(22, result.getMax().get(0).getInterval());
-        assertEquals(2015, result.getMax().get(0).getPreviousWin());
-        assertEquals(2037, result.getMax().get(0).getFollowingWin());
+        assertEquals(1980, result.getMax().get(0).getPreviousWin());
+        assertEquals(2002, result.getMax().get(0).getFollowingWin());
+
+        assertEquals("Matthew Vaughn", result.getMax().get(1).getProducer());
+        assertEquals(22, result.getMax().get(1).getInterval());
+        assertEquals(2015, result.getMax().get(1).getPreviousWin());
+        assertEquals(2037, result.getMax().get(1).getFollowingWin());
     }
 
 }
